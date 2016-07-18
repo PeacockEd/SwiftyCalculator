@@ -33,16 +33,20 @@ class ViewController: UIViewController {
         } else {
             displayText.text = digit
         }
+        //calcBrain.setOperand(displayValue)
         userIsTyping = true
     }
     
     @IBAction private func onPerformOperation(sender: UIButton)
     {
-        userIsTyping = false
+        if userIsTyping {
+            calcBrain.setOperand(displayValue)
+            userIsTyping = false
+        }
         if let symbol = sender.currentTitle {
             calcBrain.performOperation(symbol)
         }
-        
+        displayValue = calcBrain.result
     }
 }
 
