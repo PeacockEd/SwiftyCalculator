@@ -14,6 +14,8 @@ class ViewController: UIViewController {
     
     private var calcBrain = CalculatorBrain()
     private var userIsTyping = false
+    private var containsDecimal = false
+    
     
     private var displayValue: Double {
         get {
@@ -23,17 +25,29 @@ class ViewController: UIViewController {
             displayText.text = String(newValue)
         }
     }
+    
+    private func checkForDecimalValue()
+    {
+        if displayText.text!.rangeOfString(".") != nil {
+            containsDecimal = true
+        } else {
+            containsDecimal = false
+        }
+    }
 
     @IBAction private func onTouchDigit(sender: UIButton)
     {
         let digit = sender.currentTitle!
+        if digit == "." && containsDecimal {
+            return
+        }
         if userIsTyping {
             let displayContents = displayText.text!
             displayText.text = displayContents + digit
         } else {
             displayText.text = digit
         }
-        //calcBrain.setOperand(displayValue)
+        checkForDecimalValue()
         userIsTyping = true
     }
     
@@ -47,6 +61,7 @@ class ViewController: UIViewController {
             calcBrain.performOperation(symbol)
         }
         displayValue = calcBrain.result
+        checkForDecimalValue()
     }
 }
 
